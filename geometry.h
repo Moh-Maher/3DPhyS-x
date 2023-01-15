@@ -33,7 +33,7 @@
 #include <map>
 //#include<cstdlib> // for std::atexit
 //-------------------------------------------------------------------
-//
+// colors-opetion stetup
 //-------------------------------------------------------------------
 std::map<std::string,std::string> Color = {
 {"white","\x1B[37m"},{"red","\x1B[31m"},
@@ -45,16 +45,19 @@ std::map<std::string,std::string> Color = {
 };
 
 //===================================================================
-//
+//  The 3D Cube main class
 //===================================================================
 class Cube{
 private:
-	float alpha, beta, gamma;
-	std::string _color= "white";
+	float alpha, beta, gamma; // rotation angles from rotation matrix
+	std::string _color= "white"; // default color
+	
+	//dimension setup
 	float cubeWidth = 20;
 	int width = 160, height = 44;
-	float zBuffer[160 * 44];
-	char buffer[160 * 44];
+	
+	float zBuffer[160 * 44]; // screen buffer to hold the updated positions of characters 
+	char buffer[160 * 44]; // screen buffer to hold characters 
 	int background = ' ';
 	int distanceFromCam = 100;
 	float horizontalOffset;
@@ -73,15 +76,15 @@ private:
 	void  calculateForSurface(const float& cubeX, const float& cubeY, 
 				  const float& cubeZ, const char& ch);
 public:
-	Cube();
-	Cube(const float& w):cubeWidth(w){}
+	Cube(); // default constructor 
+	Cube(const float& w):cubeWidth(w){} 
 	Cube(const float& w, std::string color):cubeWidth(w),_color(color){}
 	void Draw();
 	
 };
 //===================================================================
 //-------------------------------------------------------------------
-//
+// 	Rotation around x-axis
 //-------------------------------------------------------------------
 float Cube::rotateX(const int& i, const int& j, const int& k) {
 	return (
@@ -93,7 +96,7 @@ float Cube::rotateX(const int& i, const int& j, const int& k) {
          	);
 }
 //-------------------------------------------------------------------
-//
+//	Rotation around y-axis
 //-------------------------------------------------------------------
 float Cube::rotateY(const int& i, const int& j, const int& k) {
 	return ( 
@@ -104,7 +107,7 @@ float Cube::rotateY(const int& i, const int& j, const int& k) {
 		);
 }
 //-------------------------------------------------------------------
-//
+//	Rotation around z-axis
 //-------------------------------------------------------------------
 float Cube::rotateZ(const int& i, const int& j, const int& k) {
 	return (
@@ -114,7 +117,8 @@ float Cube::rotateZ(const int& i, const int& j, const int& k) {
 	      );
 }
 //-------------------------------------------------------------------
-//
+// 	Main master formula to compute the position of characters as 
+//	a surface points 
 //-------------------------------------------------------------------
 void Cube::calculateForSurface(const float& cubeX, const float& cubeY, 
 			       const float& cubeZ, const char& ch) {
@@ -136,11 +140,11 @@ void Cube::calculateForSurface(const float& cubeX, const float& cubeY,
 	}
 }
 //-------------------------------------------------------------------
-//
+// Draw the cube according to "calculateForSurface" output 
 //-------------------------------------------------------------------
 void Cube::Draw()
 {
-	auto clr = Color.find(_color);
+	auto clr = Color.find(_color); // read the selected color
 	std::cout<<clr->second<<std::endl;
 	
 	while (1) {
@@ -171,8 +175,8 @@ void Cube::Draw()
 		
 		// increase angles slowly to reduce the velocity of rotation 
 		alpha += 0.05; // ( angle of rotation around x-axis ) 
-		beta  += 0.05;
-		gamma += 0.01;
+		beta  += 0.05; // ( angle of rotation around y-axis ) 
+		gamma += 0.01; // ( angle of rotation around z-axis ) 
 		usleep(8000 * 2);
 		//i++;
 	}
